@@ -15,7 +15,15 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
-
+	
+	<repositories>
+		<repository>
+			<id>jvx-repo</id>
+			<name>Javaexprience-custom-repo</name>
+			<url>http://maven.javaexperience.eu</url>
+		</repository>
+	</repositories>
+	
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
