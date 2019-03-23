@@ -125,30 +125,50 @@ public class DataObjectJsonImpl extends DataOperatorJsonCommon implements DataOb
 	@Override
 	public String optString(String key)
 	{
+		if(!obj.has(key))
+		{
+			return null;
+		}
 		return obj.optString(key);
 	}
 
 	@Override
-	public long optLong(String key)
+	public Long optLong(String key)
 	{
+		if(!obj.has(key))
+		{
+			return null;
+		}
 		return obj.optLong(key);
 	}
 
 	@Override
-	public double optDouble(String key)
+	public Double optDouble(String key)
 	{
+		if(!obj.has(key))
+		{
+			return null;
+		}
 		return obj.optDouble(key);
 	}
 
 	@Override
-	public int optInt(String key)
+	public Integer optInt(String key)
 	{
+		if(!obj.has(key))
+		{
+			return null;
+		}
 		return obj.optInt(key);
 	}
 
 	@Override
-	public boolean optBoolean(String key)
+	public Boolean optBoolean(String key)
 	{
+		if(!obj.has(key))
+		{
+			return null;
+		}
 		return obj.optBoolean(key);
 	}
 

@@ -141,25 +141,25 @@ public abstract class DataObjectAbstractImpl extends DataProtocolAbstractImpl im
 	}
 
 	@Override
-	public long optLong(String key)
+	public Long optLong(String key)
 	{
 		return getValueOpt(key, long.class, 0l);
 	}
 
 	@Override
-	public double optDouble(String key)
+	public Double optDouble(String key)
 	{
 		return getValueOpt(key, double.class, 0.0);
 	}
 
 	@Override
-	public int optInt(String key)
+	public Integer optInt(String key)
 	{
 		return getValueOpt(key, int.class, 0);
 	}
 
 	@Override
-	public boolean optBoolean(String key)
+	public Boolean optBoolean(String key)
 	{
 		return getValueOpt(key, boolean.class, false);
 	}

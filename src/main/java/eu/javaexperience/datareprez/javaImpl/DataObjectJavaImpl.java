@@ -160,39 +160,39 @@ public class DataObjectJavaImpl extends DataCommonJavaImpl implements DataObject
 	}
 
 	@Override
-	public long optLong(String key)
+	public Long optLong(String key)
 	{
 		Object o = obj.get(key);
 		if(o instanceof Long)
 			return (Long)o;
-		return 0;
+		return null;
 	}
 
 	@Override
-	public double optDouble(String key)
+	public Double optDouble(String key)
 	{
 		Object o = obj.get(key);
 		if(o instanceof Double)
 			return (Double)o;
-		return 0.0;
+		return null;
 	}
 
 	@Override
-	public int optInt(String key)
+	public Integer optInt(String key)
 	{
 		Object o = obj.get(key);
 		if(o instanceof Integer)
 			return (Integer)o;
-		return 0;
+		return null;
 	}
 
 	@Override
-	public boolean optBoolean(String key)
+	public Boolean optBoolean(String key)
 	{
 		Object o = obj.get(key);
 		if(o instanceof Boolean)
 			return (Boolean)o;
-		return false;
+		return null;
 	}
 
 	@Override

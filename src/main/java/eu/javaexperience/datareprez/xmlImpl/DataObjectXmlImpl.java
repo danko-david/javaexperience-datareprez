@@ -239,25 +239,25 @@ public class DataObjectXmlImpl extends DataOperatorXmlCommon implements DataObje
 	}
 
 	@Override
-	public long optLong(String key)
+	public Long optLong(String key)
 	{
 		return getValueAs(key, long.class, true);
 	}
 
 	@Override
-	public double optDouble(String key)
+	public Double optDouble(String key)
 	{
 		return getValueAs(key, double.class, true);
 	}
 
 	@Override
-	public int optInt(String key)
+	public Integer optInt(String key)
 	{
 		return getValueAs(key, int.class, true);
 	}
 
 	@Override
-	public boolean optBoolean(String key)
+	public Boolean optBoolean(String key)
 	{
 		return getValueAs(key, boolean.class, true);
 	}
@@ -265,7 +265,7 @@ public class DataObjectXmlImpl extends DataOperatorXmlCommon implements DataObje
 	@Override
 	public DataObject optObject(String key)
 	{
-		Node o = getValueAs(key, Node.class, false);
+		Node o = getValueAs(key, Node.class, true);
 		if(o == null)
 		{
 			return null;
@@ -288,7 +288,7 @@ public class DataObjectXmlImpl extends DataOperatorXmlCommon implements DataObje
 	{
 		try
 		{
-			return getValueAs(key, byte[].class, false);
+			return getValueAs(key, byte[].class, true);
 		}
 		catch(Exception e)
 		{

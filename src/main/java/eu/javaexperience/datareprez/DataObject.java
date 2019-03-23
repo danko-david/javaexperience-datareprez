@@ -33,10 +33,10 @@ public interface DataObject extends DataCommon, ObjectLike
 	public Object get(String key);
 	
 	public String optString(String key);
-	public long optLong(String key);
-	public double optDouble(String key);
-	public int optInt(String key);
-	public boolean optBoolean(String key);
+	public Long optLong(String key);
+	public Double optDouble(String key);
+	public Integer optInt(String key);
+	public Boolean optBoolean(String key);
 	public DataObject optObject(String key);
 	public DataArray optArray(String key);
 	public byte[] optBlob(String key);

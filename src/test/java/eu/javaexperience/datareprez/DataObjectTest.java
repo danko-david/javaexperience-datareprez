@@ -36,9 +36,19 @@ public abstract class DataObjectTest
 		return ret;
 	}
 	
+	public DataObject createNewObject()
+	{
+		return prototye.newObjectInstance();
+	}
+
+	public DataArray createNewArray()
+	{
+		return prototye.newArrayInstance();
+	}
+	
 	public DataObject createFullFeature()
 	{
-		DataObject obj = prototye.newObjectInstance();
+		DataObject obj = createNewObject();
 		obj.putString("string", "string");
 		obj.putArray("array", prototye.newArrayInstance());
 		obj.putBlob( "blob", "blob".getBytes());
@@ -85,6 +95,18 @@ public abstract class DataObjectTest
 		DataObject full = createFullFeature();
 		System.out.println(new String(full.toBlob()));
 		assertFullFeaturedBounded(full);
+	}
+	
+	@Test
+	public void testOptReturnsNull()
+	{
+		DataObject obj = createNewObject();
+		assertNull(obj.opt("unknown"));
+		assertNull(obj.optString("unknown"));
+		assertNull(obj.optBlob("unknown"));
+		assertNull(obj.optObject("unknown"));
+		assertNull(obj.optArray("unknown"));
+		
 	}
 	
 	/*@Test
