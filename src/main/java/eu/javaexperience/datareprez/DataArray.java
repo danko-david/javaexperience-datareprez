@@ -66,5 +66,4 @@ public interface DataArray extends DataCommon, Iterable<Object>, ArrayLike
 	public boolean isBlob(int i);
 	
 	public Object[] asJavaArray();
-	public byte[] toBlob();
 }

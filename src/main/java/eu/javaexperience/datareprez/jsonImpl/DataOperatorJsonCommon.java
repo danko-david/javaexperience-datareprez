@@ -203,4 +203,16 @@ public abstract class DataOperatorJsonCommon extends DataCommonAbstractImpl
 	{
 		return JSONObject.class;
 	}
+	
+	@Override
+	public Object getImpl()
+	{
+		return null;
+	}
+	
+	@Override
+	public byte[] toBlob()
+	{
+		return null;
+	}
 }

@@ -43,12 +43,6 @@ public class XmlDataSender extends DataOperatorJsonCommon implements DataSender
 	}
 
 	@Override
-	public Object getImpl()
-	{
-		return null;
-	}
-
-	@Override
 	public void close() throws IOException
 	{
 		pw.close();

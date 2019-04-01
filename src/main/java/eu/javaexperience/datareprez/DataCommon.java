@@ -39,4 +39,6 @@ public interface DataCommon
 	
 	
 	public Class getCommonsClass();
+	
+	public byte[] toBlob();
 }

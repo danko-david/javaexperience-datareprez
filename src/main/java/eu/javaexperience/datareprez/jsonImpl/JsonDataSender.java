@@ -47,12 +47,6 @@ public class JsonDataSender extends DataOperatorJsonCommon implements DataSender
 	}
 
 	@Override
-	public Object getImpl()
-	{
-		return null;
-	}
-
-	@Override
 	public void close() throws IOException
 	{
 		pw.close();

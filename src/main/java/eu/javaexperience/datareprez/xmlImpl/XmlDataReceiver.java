@@ -65,11 +65,6 @@ public class XmlDataReceiver extends DataOperatorJsonCommon implements DataRecei
 		}
 	}
 
-	public Object getImpl()
-	{
-		return null;
-	}
-
 	@Override
 	public void close() throws IOException
 	{

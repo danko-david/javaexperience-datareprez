@@ -9,6 +9,12 @@ import org.junit.Test;
 import eu.javaexperience.collection.map.BulkTransitMap;
 import eu.javaexperience.reflect.Mirror;
 
+/**
+ * TODO set null and check (has and null)
+ * TODO DataReprezTools.put, especially when dealing with different
+ * 	implementation of Data{Object,Array} TODO add map as an addable type.
+ * 
+ * */
 public abstract class DataObjectTest
 {
 	protected final DataCommon prototye;
@@ -17,8 +23,6 @@ public abstract class DataObjectTest
 	{
 		this.prototye = prototype;
 	}
-	
-	//TODO set null and check (has and null)
 	
 	public static Map<String, Object> createFullFeaturedNative()
 	{

@@ -40,14 +40,8 @@ public class JsonDataReceiver extends DataOperatorJsonCommon implements DataRece
 	}
 
 	@Override
-	public Object getImpl()
-	{
-		return null;
-	}
-
-	@Override
 	public void close() throws IOException
 	{
 		br.close();
-	}
+	}	
 }

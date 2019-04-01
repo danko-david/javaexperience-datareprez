@@ -53,4 +53,10 @@ public class GenericDataSender extends DataProtocolAbstractImpl implements DataS
 	{
 		return protocol.getCommonsClass();
 	}
+	
+	@Override
+	public byte[] toBlob()
+	{
+		return null;
+	}
 }

@@ -65,5 +65,4 @@ public interface DataObject extends DataCommon, ObjectLike
 	public boolean isNull(String key);
 	
 	public Map<String, Object> asJavaMap();
-	public byte[] toBlob();
 }

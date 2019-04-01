@@ -55,4 +55,10 @@ public class GenericDataReceiver extends DataProtocolAbstractImpl implements Dat
 	{
 		return protocol.getCommonsClass();
 	}
+
+	@Override
+	public byte[] toBlob()
+	{
+		return null;
+	}
 }
