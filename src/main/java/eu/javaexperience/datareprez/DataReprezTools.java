@@ -576,6 +576,30 @@ public class DataReprezTools
 			return null;
 		}
 	};
+	
+	public static final DataWrapper WRAP_OBJECT_WITH_PROPERTIES = new DataWrapper()
+	{
+		@Override
+		public DataCommon wrap(DataWrapper dw, DataCommon prototype, Object o)
+		{
+			if(o instanceof ObjectWithProperty)
+			{
+				ObjectWithProperty obj = (ObjectWithProperty) o;
+				DataObject ret = prototype.newObjectInstance();
+				for(String key:obj.keys())
+				{
+					Object w = obj.get(key);
+					{
+						if(null == put(ret, key, w))
+						{
+							put(ret, key, dw.wrap(dw, prototype, w));
+						}
+					}
+				}
+			}
+			return null;
+		}
+	};
 
 	public static final DataWrapper WRAP_ENUM = new DataWrapper()
 	{
