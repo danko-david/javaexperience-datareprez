@@ -606,7 +606,39 @@ public class DataReprezTools
 		@Override
 		public DataCommon wrap(DataWrapper topWrapper, DataCommon prototype, Object o)
 		{
-			if(null != o && o.getClass().isEnum())
+			/*
+			 * A weird java behavior. This kind of enum check not always works: 
+			 * 	null != o && o.getClass().isEnum()
+			 * 
+			 *  public enum Something
+			 *  {
+			 *  	A()
+			 *  	{
+			 *  		public String getStr()
+			 *  		{
+			 *  			return "A";
+			 *  		}
+			 *  	},
+			 *  
+			 *  	B()
+			 *  	{
+			 *  		public String getStr()
+			 *  		{
+			 *  			return "B";
+			 *  		}
+			 *  	},
+			 *  	;
+			 *  	public abstract String getStr();
+			 *  }
+			 *
+			 * - Something.A.getClass.isEnum() => false
+			 * - Something.A instanceof Enum => true
+			 * 
+			 * Because A and B implemented as an anonymous instance inside `Something`
+			 * which is not and enum itself.
+			 * - Something.A.getClass.toString() => Something$1
+			 */
+			if(o instanceof Enum)
 			{
 				DataObject ret = prototype.newObjectInstance();
 				ret.putString("name", ((Enum)o).name());
