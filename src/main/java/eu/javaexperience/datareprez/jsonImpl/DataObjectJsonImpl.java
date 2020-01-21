@@ -451,4 +451,10 @@ public class DataObjectJsonImpl extends DataOperatorJsonCommon implements DataOb
 	{
 		return obj.toString().getBytes();
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "DataObjectJsonImpl: "+obj;
+	}
 }

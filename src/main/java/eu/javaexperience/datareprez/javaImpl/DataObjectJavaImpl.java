@@ -1,6 +1,7 @@
 package eu.javaexperience.datareprez.javaImpl;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Map;
 
 import eu.javaexperience.collection.map.MapTools;
@@ -428,6 +429,6 @@ public class DataObjectJavaImpl extends DataCommonJavaImpl implements DataObject
 	@Override
 	public String toString()
 	{
-		return MapTools.toStringMultiline(obj);
+		return "DataArrayJavaImpl: "+MapTools.toStringMultiline(obj);
 	}
 }

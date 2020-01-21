@@ -556,4 +556,10 @@ public class DataArrayJavaImpl extends DataCommonJavaImpl implements DataArray, 
 	{
 		return SerializationTools.serializeIntoBlob((Serializable) arr);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "DataArrayJavaImpl: "+Arrays.toString(arr);
+	}
 }

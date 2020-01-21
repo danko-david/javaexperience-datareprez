@@ -482,4 +482,10 @@ public class DataArrayJsonImpl extends DataOperatorJsonCommon implements DataArr
 	{
 		return arr.toString().getBytes();
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "DataArrayJsonImpl: "+arr;
+	}
 }
