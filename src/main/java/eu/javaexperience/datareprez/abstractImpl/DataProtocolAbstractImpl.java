@@ -9,6 +9,7 @@ import eu.javaexperience.datareprez.DataCommonAbstractImpl;
 import eu.javaexperience.datareprez.DataObject;
 import eu.javaexperience.datareprez.DataReceiver;
 import eu.javaexperience.datareprez.DataSender;
+import eu.javaexperience.reflect.Mirror;
 
 public abstract class DataProtocolAbstractImpl extends DataCommonAbstractImpl
 {
@@ -67,12 +68,6 @@ public abstract class DataProtocolAbstractImpl extends DataCommonAbstractImpl
 	}
 
 	@Override
-	public boolean isNull(Object o)
-	{
-		return null == o;
-	}
-
-	@Override
 	public DataArray arrayFromBlob(byte[] data)
 	{
 		return getProtocolHandler().arrayFromBlob(data);
@@ -82,5 +77,10 @@ public abstract class DataProtocolAbstractImpl extends DataCommonAbstractImpl
 	public DataObject objectFromBlob(byte[] data)
 	{
 		return getProtocolHandler().objectFromBlob(data);
+	}
+	
+	protected boolean isObjectNull(Object val)
+	{
+		return Mirror.equals(getProtocolHandler().getNullObject(), val);
 	}
 }

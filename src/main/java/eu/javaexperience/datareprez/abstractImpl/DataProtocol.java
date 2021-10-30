@@ -19,4 +19,6 @@ public interface DataProtocol
 	public DataArray arrayFromBlob(byte[] data);
 	
 	public Class getCommonsClass();
+	
+	public Object getNullObject();
 }

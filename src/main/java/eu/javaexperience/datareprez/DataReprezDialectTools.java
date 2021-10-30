@@ -20,6 +20,7 @@ import eu.javaexperience.reflect.Caster;
 import eu.javaexperience.reflect.FieldNameDialect;
 import eu.javaexperience.reflect.FieldNameDialects;
 import eu.javaexperience.reflect.Mirror;
+import eu.javaexperience.reflect.property.DataAccessor;
 
 public class DataReprezDialectTools
 {

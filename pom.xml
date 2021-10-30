@@ -4,7 +4,7 @@
 	
 	<groupId>javaexperience</groupId>
 	<artifactId>datareprez</artifactId>
-	<version>1.1.3</version>
+	<version>1.2</version>
 	<packaging>jar</packaging>
 	
 	<name>datareprez</name>
@@ -20,7 +20,7 @@
 		<repository>
 			<id>jvx-repo</id>
 			<name>Javaexprience-custom-repo</name>
-			<url>http://maven.javaexperience.eu/</url>
+			<url>https://maven.javaexperience.eu/</url>
 		</repository>
 	</repositories>
 	
@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>4.13.1</version>
 			<scope>test</scope>
 		</dependency>
 		
@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>javaexperience</groupId>
 			<artifactId>core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.4.12</version>
 		</dependency>
 	</dependencies>
 	

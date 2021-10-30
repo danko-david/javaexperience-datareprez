@@ -6,11 +6,12 @@ import eu.javaexperience.datareprez.DataObject;
 public enum DataReprezComponentTypes
 {
 	NULL(void.class, Void.class),
-	Boolean(boolean.class, boolean.class),
+	Boolean(boolean.class, Boolean.class),
 	Integer(int.class, Integer.class),
 	Long(long.class, Long.class),
 	Double(double.class, Double.class),
 	String(String.class),
+	Blob(byte[].class),
 	DataObject(DataObject.class),
 	DataArray(DataArray.class),
 	

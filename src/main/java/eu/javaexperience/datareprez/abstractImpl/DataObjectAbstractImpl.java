@@ -3,26 +3,55 @@ package eu.javaexperience.datareprez.abstractImpl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
+import org.w3c.dom.Node;
+
+import eu.javaexperience.collection.map.SmallMap;
 import eu.javaexperience.datareprez.DataArray;
 import eu.javaexperience.datareprez.DataCommonAbstractImpl;
 import eu.javaexperience.datareprez.DataObject;
+import eu.javaexperience.datareprez.DataReprezException;
 import eu.javaexperience.datareprez.convertFrom.DataReprezType;
+import eu.javaexperience.datareprez.xmlImpl.DataCommonXmlImpl;
 import eu.javaexperience.reflect.Mirror;
 
 public abstract class DataObjectAbstractImpl extends DataProtocolAbstractImpl implements DataObject
 {
 	protected abstract void setSubjectValue(String key, Class<?> valueType, Object val);
 	
-	protected abstract <T> T getValueAs(String key, Class<T> retType, boolean mayNull);
+	protected <T> T getValueAs(String key, Class<T> retType, boolean mayNull)
+	{
+		T ret = getValueAs(key, retType);
+		
+		if(!mayNull && null == ret && !has(key))
+		{
+			throw new DataReprezException("No value present under key: "+key);
+		}
+		
+		if(isObjectNull(ret))
+		{
+			return null;
+		}
+		
+		return ret;
+	}
+	
+	protected abstract <T> T getValueAs(String key, Class<T> retType);
 	
 	protected void deleteKey(String key)
 	{
-		setSubjectValue(key, void.class, key);
+		setSubjectValue(key, void.class, null);
 	}
 	
 	protected <T> T getValueOpt(String key, Class<T> retType, T defaultValue)
 	{
 		T ret = getValueAs(key, retType, true);
+		
+		if(isObjectNull(ret))
+		{
+			return null;
+		}
+		
 		if(null != ret)
 		{
 			return ret;
@@ -137,49 +166,49 @@ public abstract class DataObjectAbstractImpl extends DataProtocolAbstractImpl im
 	@Override
 	public String optString(String key)
 	{
-		return getValueOpt(key, String.class, "");
+		return getValueOpt(key, String.class, null);
 	}
 
 	@Override
 	public Long optLong(String key)
 	{
-		return getValueOpt(key, long.class, 0l);
+		return getValueOpt(key, long.class, null);
 	}
 
 	@Override
 	public Double optDouble(String key)
 	{
-		return getValueOpt(key, double.class, 0.0);
+		return getValueOpt(key, double.class, null);
 	}
 
 	@Override
 	public Integer optInt(String key)
 	{
-		return getValueOpt(key, int.class, 0);
+		return getValueOpt(key, int.class, null);
 	}
 
 	@Override
 	public Boolean optBoolean(String key)
 	{
-		return getValueOpt(key, boolean.class, false);
+		return getValueOpt(key, boolean.class, null);
 	}
 
 	@Override
 	public DataObject optObject(String key)
 	{
-		return getValueAs(key, DataObject.class, true);
+		return getValueOpt(key, DataObject.class, null);
 	}
 
 	@Override
 	public DataArray optArray(String key)
 	{
-		return getValueAs(key, DataArray.class, true);
+		return getValueOpt(key, DataArray.class, null);
 	}
 
 	@Override
 	public byte[] optBlob(String key)
 	{
-		return getValueOpt(key, byte[].class, Mirror.emptyByteArray);
+		return getValueOpt(key, byte[].class, null);
 	}
 	
 	@Override
@@ -221,7 +250,7 @@ public abstract class DataObjectAbstractImpl extends DataProtocolAbstractImpl im
 	@Override
 	public DataArray optArray(String key, DataArray def)
 	{
-		return getValueAs(key, null, true);
+		return getValueAs(key, DataArray.class, true);
 	}
 	
 	@Override
@@ -325,18 +354,18 @@ public abstract class DataObjectAbstractImpl extends DataProtocolAbstractImpl im
 	@Override
 	public boolean isNull(String key)
 	{
-		return null == getValueAs(key, null, true);
+		return isObjectNull(get(key));
 	}
 
 	@Override
 	public Map<String, Object> asJavaMap()
 	{
-		Map<String,Object> ret = new HashMap<>();
+		Map<String,Object> ret = new SmallMap<>();
 		for(String k:keys())
 		{
 			Object curr = getValueAs(k, null, false);
 			if(curr instanceof DataArray)
-				ret.put(k, ((DataArray)curr).asJavaArray());
+				ret.put(k, ((DataArray)curr).asJavaList());
 			else if(curr instanceof DataObject)
 				ret.put(k, ((DataObject)curr).asJavaMap());
 			else
@@ -350,12 +379,6 @@ public abstract class DataObjectAbstractImpl extends DataProtocolAbstractImpl im
 	public void remove(String key)
 	{
 		deleteKey(key);
-	}
-	
-	@Override
-	public boolean isNull(Object o)
-	{
-		return null == o;
 	}
 	
 	@Override

@@ -1,13 +1,45 @@
 package eu.javaexperience.datareprez.abstractImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.w3c.dom.Node;
+
 import eu.javaexperience.datareprez.DataArray;
+import eu.javaexperience.datareprez.DataCommonAbstractImpl;
 import eu.javaexperience.datareprez.DataObject;
+import eu.javaexperience.datareprez.DataReprezException;
 import eu.javaexperience.datareprez.convertFrom.DataReprezType;
+import eu.javaexperience.datareprez.xmlImpl.DataCommonXmlImpl;
+import eu.javaexperience.reflect.Mirror;
 
 public abstract class DataArrayAbstractImpl extends DataProtocolAbstractImpl implements DataArray
 {
 	protected abstract <T> void setSubjectValue(int index, Class<T> cls, T value);
-	protected abstract <T> T getValueAs(int index, Class<T> cls, boolean mayNull);
+	
+	protected <T> T getValueAs(int index, Class<T> retType, boolean mayNull)
+	{
+		if(size() < index)
+		{
+			return null;
+		}
+		
+		T ret = getValueAs(index, retType);
+		
+		if(!mayNull && null == ret)
+		{
+			throw new DataReprezException("No value present under index: "+index);
+		}
+		
+		if(isObjectNull(ret))
+		{
+			return null;
+		}
+		
+		return ret;
+	}
+	
+	protected abstract <T> T getValueAs(int index, Class<T> retType);
 	
 	protected <T> T getValueOpt(int index, Class<T> cls, T defaultValue)
 	{
@@ -65,7 +97,7 @@ public abstract class DataArrayAbstractImpl extends DataProtocolAbstractImpl imp
 	@Override
 	public void putNull(int i)
 	{
-		setSubjectValue(i, void.class, null);
+		setSubjectValue(i, (Class) void.class, getProtocolHandler().getNullObject());
 	}
 
 	@Override
@@ -117,25 +149,25 @@ public abstract class DataArrayAbstractImpl extends DataProtocolAbstractImpl imp
 	}
 
 	@Override
-	public long optLong(int i)
+	public Long optLong(int i)
 	{
 		return getValueAs(i, long.class, true);
 	}
 
 	@Override
-	public double optDouble(int i)
+	public Double optDouble(int i)
 	{
 		return getValueAs(i, double.class, true);
 	}
 
 	@Override
-	public int optInt(int i)
+	public Integer optInt(int i)
 	{
 		return getValueAs(i, int.class, true);
 	}
 
 	@Override
-	public boolean optBoolean(int i)
+	public Boolean optBoolean(int i)
 	{
 		return getValueAs(i, boolean.class, true);
 	}
@@ -197,7 +229,7 @@ public abstract class DataArrayAbstractImpl extends DataProtocolAbstractImpl imp
 	@Override
 	public void unset(int i)
 	{
-		setSubjectValue(i, void.class, null);
+		setSubjectValue(i, null, null);
 	}
 
 	@Override
@@ -239,13 +271,13 @@ public abstract class DataArrayAbstractImpl extends DataProtocolAbstractImpl imp
 	@Override
 	public boolean isArray(int i)
 	{
-		return getValueAs(i, DataObject.class, true) instanceof DataObject;
+		return getValueAs(i, DataArray.class, true) instanceof DataArray;
 	}
 
 	@Override
 	public boolean isNull(int i)
 	{
-		return null == getValueAs(i, null, true);
+		return isObjectNull(opt(i));
 	}
 
 	@Override
@@ -318,18 +350,19 @@ public abstract class DataArrayAbstractImpl extends DataProtocolAbstractImpl imp
 	}
 
 	@Override
-	public Object[] asJavaArray()
+	public List<Object> asJavaList()
 	{
-		Object[] ret = new Object[size()];
-		for(int i=0;i<ret.length;i++)
+		List<Object> ret = new ArrayList<>();
+		int s = size();
+		for(int i=0;i<s;i++)
 		{
-			Object curr = get(i);
+			Object curr = opt(i);
 			if(curr instanceof DataArray)
-				ret[i] = ((DataArray)curr).asJavaArray();
+				ret.add(((DataArray)curr).asJavaList());
 			else if(curr instanceof DataObject)
-				ret[i] = ((DataObject)curr).asJavaMap();
+				ret.add(((DataObject)curr).asJavaMap());
 			else
-				ret[i] = curr;
+				ret.add(curr);
 		}
 		
 		return ret;

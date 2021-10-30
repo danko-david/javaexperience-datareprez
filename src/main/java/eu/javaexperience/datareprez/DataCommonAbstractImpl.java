@@ -1,7 +1,7 @@
 package eu.javaexperience.datareprez;
 
-import eu.javaexperience.datareprez.convertFrom.ArrayLike;
 import eu.javaexperience.interfaces.ObjectWithProperty;
+import eu.javaexperience.text.Format;
 
 public abstract class DataCommonAbstractImpl implements DataCommon
 {
@@ -25,5 +25,15 @@ public abstract class DataCommonAbstractImpl implements DataCommon
 			DataReprezTools.put(ret, i, arr.get(i));
 		}
 		return ret;
+	}
+
+	public static Object wrapValueToStore(Class type, Object value)
+	{
+		if(byte[].class == type)
+		{
+			return Format.base64Encode((byte[]) value);
+		}
+		
+		return value;
 	}
 }

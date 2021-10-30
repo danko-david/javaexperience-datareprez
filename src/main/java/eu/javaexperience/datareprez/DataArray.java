@@ -1,7 +1,7 @@
 package eu.javaexperience.datareprez;
 
-import eu.javaexperience.datareprez.convertFrom.ArrayLike;
- 
+import java.util.List;
+
 public interface DataArray extends DataCommon, Iterable<Object>, ArrayLike
 {
 	public void putString(String val);
@@ -34,10 +34,10 @@ public interface DataArray extends DataCommon, Iterable<Object>, ArrayLike
 	public byte[] getBlob(int i);
 	
 	public String optString(int i);
-	public long optLong(int i);
-	public double optDouble(int i);
-	public int optInt(int i);
-	public boolean optBoolean(int i);
+	public Long optLong(int i);
+	public Double optDouble(int i);
+	public Integer optInt(int i);
+	public Boolean optBoolean(int i);
 	public DataObject optObject(int i);
 	public DataArray optArray(int i);
 	public byte[] optBlob(int i);
@@ -65,5 +65,5 @@ public interface DataArray extends DataCommon, Iterable<Object>, ArrayLike
 	public boolean isNull(int i);
 	public boolean isBlob(int i);
 	
-	public Object[] asJavaArray();
+	public List<Object> asJavaList();
 }

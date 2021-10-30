@@ -8,15 +8,16 @@ import java.util.Map.Entry;
 
 import eu.javaexperience.collection.map.BulkTransitMap;
 import eu.javaexperience.collection.map.SmallMap;
-import eu.javaexperience.datareprez.convertFrom.ArrayLike;
 import eu.javaexperience.datareprez.convertFrom.ClassObjectLike;
-import eu.javaexperience.datareprez.convertFrom.DataLike;
 import eu.javaexperience.datareprez.convertFrom.DataWrapper;
 import eu.javaexperience.datareprez.convertFrom.ModifiableObject;
 import eu.javaexperience.exceptions.UnimplementedCaseException;
 import eu.javaexperience.interfaces.ObjectWithProperty;
 import eu.javaexperience.reflect.Mirror;
+import eu.javaexperience.reflect.Mirror.BelongTo;
 import eu.javaexperience.reflect.Mirror.FieldSelector;
+import eu.javaexperience.reflect.Mirror.Select;
+import eu.javaexperience.reflect.Mirror.Visibility;
 import eu.javaexperience.reflect.NotatedCaster;
 
 public class DataReprezTools
@@ -57,7 +58,7 @@ public class DataReprezTools
 	 * */
 	public static Class<?> put(DataWrapper dw, DataArray arr, int i, Object o)
 	{
-		if(o == null || arr.isNull(o))
+		if(o == null)
 		{
 			arr.putNull(i);
 			return Void.class;
@@ -161,29 +162,27 @@ public class DataReprezTools
 	}
 	
 	/**
-	 * vissztaért hogy milyen tipussal sikerült eltárolni az értéket.
-	 * Void.class ha a megadott érték null volt.
-	 * nullal tér vissza ha nem sikerült eltenni.
-	 * DataObject.class - adatobjektum
-	 * DataArray.class - adattömb
+	 * Returns with the class of the stored object.
+	 * 	Returns null when the types is not stored.
 	 * 
-	 * Összes:
-	 * 	Void.class
+	 * All retunting types:
+	 * 	Void.class (when null given)
 	 * 	String.class
+	 *  Character.class
 	 * 	Long.class
+	 * 	Date.class
 	 * 	Integer.class
+	 * 	Byte.class
+	 * 	Short.class
 	 * 	Double.class
+	 * 	Float.class
 	 * 	Boolean.class
 	 * 	DataObject.class
 	 * 	DataArray.class
-	 * 	Float.class (double)
-	 * 	Character.class (String)
-	 * 	Short.class (int)
-	 * 	Byte.class (int)
 	 * */
 	public static Class<?> put(DataWrapper dw, DataObject obj, String key, Object o)
 	{
-		if(o == null || obj.isNull(o))
+		if(o == null)
 		{
 			obj.putNull(key);
 			return Void.class;
@@ -729,4 +728,13 @@ public class DataReprezTools
 		return (T) ret;
 	}
 	
+	
+	public static final DataWrapper DATA_WRAPPER_BUILT_IN = DataReprezTools.combineWrappers
+	(
+		DataReprezTools.WRAP_ENUM,
+		DataReprezTools.WRAP_ARRAY_COLLECTION_MAP,
+		DataReprezTools.WRAP_DATA_LIKE,
+		DataReprezTools.WRAP_CLASS__OBJECT_WITH_PROPERTY,
+		DataReprezTools.createClassInstanceWrapper(new FieldSelector(true, Visibility.Public, BelongTo.Instance, Select.All, Select.IsNot, Select.All))
+	);
 }

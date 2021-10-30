@@ -1,9 +1,7 @@
 package eu.javaexperience.datareprez;
 
-import eu.javaexperience.datareprez.convertFrom.DataLike;
+import eu.javaexperience.interfaces.IndexedStorage;
 
-public interface ArrayLike extends DataLike
+public interface ArrayLike extends DataLike, IndexedStorage
 {
-	public Object get(int i);
-	public int size();
 }

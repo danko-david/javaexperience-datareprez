@@ -1,109 +1,88 @@
-package eu.javaexperience.datareprez.javaImpl;
+package eu.javaexperience.datareprez.jsonImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
-import java.util.Map;
 
-import eu.javaexperience.binary.FramedPacketCutter;
-import eu.javaexperience.binary.PacketFramingTools;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import eu.javaexperience.datareprez.DataArray;
-import eu.javaexperience.datareprez.DataCommon;
 import eu.javaexperience.datareprez.DataCommonAbstractImpl;
 import eu.javaexperience.datareprez.DataObject;
 import eu.javaexperience.datareprez.abstractImpl.DataProtocol;
 import eu.javaexperience.datareprez.convertFrom.DataReprezComponentTypes;
-import eu.javaexperience.io.SerializationTools;
+import eu.javaexperience.io.primitive.LineReader;
+import eu.javaexperience.io.primitive.LineReader.LineMode;
 import eu.javaexperience.reflect.CastTo;
+import eu.javaexperience.reflect.Mirror;
 import eu.javaexperience.text.Format;
 
-public abstract class DataCommonJavaImpl extends DataCommonAbstractImpl
+public abstract class DataCommonJsonImpl extends DataCommonAbstractImpl
 {
-	public static DataCommon PROTOTYPE = new DataObjectJavaImpl();
-	
 	public static final DataProtocol PROTOCOL = new DataProtocol()
 	{
 		@Override
 		public void sendPacket(byte[] data, OutputStream os) throws IOException
 		{
-			os.write(PacketFramingTools.frameBytes(data, (byte) 0xff));
-		}
-		
-		@Override
-		public DataObject objectFromBlob(byte[] data)
-		{
-			return new DataObjectJavaImpl((Map) SerializationTools.deserializeFromBlob(data));
-		}
-		
-		@Override
-		public DataObject newObjectInstance()
-		{
-			return new DataObjectJavaImpl();
-		}
-		
-		@Override
-		public DataArray newArrayInstance()
-		{
-			return new DataArrayJavaImpl();
-		}
-		
-		@Override
-		public Class getCommonsClass()
-		{
-			return Map.class;
-		}
-		
-		@Override
-		public DataArray arrayFromBlob(byte[] data)
-		{
-			return new DataArrayJavaImpl((List) SerializationTools.deserializeFromBlob(data));
+			os.write(data);
+			os.write(10);
 		}
 		
 		@Override
 		public byte[] acquirePacket(InputStream is) throws IOException
 		{
-			return receiveData(is);
+			return LineReader.readLine(is, LineMode.Unix).getBytes();
+		}
+		
+		@Override
+		public DataObject objectFromBlob(byte[] data)
+		{
+			return new DataObjectJsonImpl(new JSONObject(new String(data)));
+		}
+		
+		@Override
+		public DataObject newObjectInstance()
+		{
+			return new DataObjectJsonImpl();
+		}
+		
+		@Override
+		public DataArray newArrayInstance()
+		{
+			return new DataArrayJsonImpl();
+		}
+		
+		@Override
+		public Class getCommonsClass()
+		{
+			return JSONObject.class;
+		}
+		
+		@Override
+		public DataArray arrayFromBlob(byte[] data)
+		{
+			return new DataArrayJsonImpl(new JSONArray(new String(data)));
 		}
 
 		@Override
 		public Object getNullObject()
 		{
-			return null;
+			return JSONObject.NULL;
 		}
 	};
 	
-	protected static byte[] receiveData(InputStream is) throws IOException
-	{
-		byte[][] rec = new byte[1][0];
-		rec[0] = null;
-		FramedPacketCutter cut = new FramedPacketCutter((byte) 0xff, p->{rec[0] = p;});
-		//this is really inefficient, but gives a sample how the implementation works
-		
-		byte[] read = new byte[1];
-		while(null == rec[0])
-		{
-			if(is.read(read, 0, 1) < 1)
-			{
-				return null;
-			}
-			cut.feedBytes(read, 1);
-		}
-		
-		return rec[0];
-	}
-
 	public static <T> T castToType(Object o, Class<T> cls)
 	{
 		if(null != o)
 		{
 			if(Object.class  == cls || null == cls)
 			{
-				if(o instanceof Map)
+				if(o instanceof JSONObject)
 				{
 					cls = (Class<T>) DataObject.class;
 				}
-				else if(o instanceof List)
+				else if(o instanceof JSONArray)
 				{
 					cls = (Class<T>) DataArray.class;
 				}
@@ -120,18 +99,8 @@ public abstract class DataCommonJavaImpl extends DataCommonAbstractImpl
 				switch(type)
 				{
 					case Boolean: 	return (T) CastTo.Boolean.cast(o);
-					case DataArray:
-						if(o instanceof DataArray)
-						{
-							return (T)o;
-						}
-						return (T) new DataArrayJavaImpl((List)o);
-					case DataObject:
-						if(o instanceof DataObject)
-						{
-							return (T)o;
-						}
-						return (T) new DataObjectJavaImpl((Map)o);
+					case DataArray:	return (T) new DataArrayJsonImpl((JSONArray)o);
+					case DataObject:return (T) new DataObjectJsonImpl((JSONObject)o);
 					case Double:	return (T) CastTo.Double.cast(o);
 					case Integer:	return (T) CastTo.Int.cast(o);
 					case Long:		return (T) CastTo.Long.cast(o);
@@ -159,13 +128,18 @@ public abstract class DataCommonJavaImpl extends DataCommonAbstractImpl
 	{
 		if(DataObject.class == valueType)
 		{
-			val = ((DataObjectJavaImpl)val).obj;
+			val = ((DataObjectJsonImpl)val).obj;
 		}
 		else if(DataArray.class == valueType)
 		{
-			val = ((DataArrayJavaImpl)val).arr;
+			val = ((DataArrayJsonImpl)val).arr;
+		}
+		else if(null == val && void.class == valueType)
+		{
+			return JSONObject.NULL;
 		}
 		
 		return val;
 	}
+	
 }
